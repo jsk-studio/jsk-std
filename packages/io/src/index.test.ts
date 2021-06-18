@@ -1,6 +1,6 @@
-import { deleteFolderSync } from '.'
+import { deleteFolderRecursive } from '.'
 import path from 'path'
 
 test('test for delete folder sync', () => {
-    deleteFolderSync(path.join(__dirname, '../lib'), /.ts$/)
+    deleteFolderRecursive(path.join(__dirname, '../lib'), /.ts$/)
 })
