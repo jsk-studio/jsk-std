@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import { xTypeOf } from '@jsk-std/x'
+import { xArray, xTypeOf } from '@jsk-std/x'
 
 type IFilter = RegExp | ((filename: string) => boolean)
 
@@ -65,14 +65,16 @@ export function createFolderRecursive(dirname: string) {
     }
 }
 
-export function createFolder(url: string, force = true) {
-    const existed = fs.existsSync(url)
-    if (existed && force) {
-        deleteFolderRecursive(url)
-        createFolder(url)
-    } else if (existed) {
-        console.warn('The Folder Existed: ' + url)
-    } else {
-        createFolder(url)
+export function createFolders(urls: string | string[], force = true) {
+    for (const url of xArray(urls)) {
+        const existed = fs.existsSync(url)
+        if (existed && force) {
+            deleteFolderRecursive(url)
+            createFolderRecursive(url)
+        } else if (existed) {
+            console.warn('The Folder Existed: ' + url)
+        } else {
+            createFolderRecursive(url)
+        } 
     }
 }

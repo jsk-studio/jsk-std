@@ -40,3 +40,15 @@ export function xSingleton<T>(create: (key: string) => T) {
       }
   })
 }
+
+export function xTransfer<T>(target: T, values?: Partial<T>) {
+  if (!values) {
+      return
+  }
+  for (const key of Object.keys(values)) {
+      const val = values[key as keyof typeof target]
+      if (val !== undefined) {
+          target[key as keyof typeof target] = val as any
+      }
+  }
+}
