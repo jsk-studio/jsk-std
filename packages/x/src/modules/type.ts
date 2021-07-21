@@ -8,9 +8,9 @@ type ITypes<T = any> = {
   date: Date,
   promise: Promise<T>,
   array: Array<T>,
-  function: Function,
   regexp: RegExp,
   object: object,
+  function: () => T,
 }
 
 export function xType(value: any) {
@@ -24,6 +24,9 @@ export function xTypeOf<
   U extends ITypesKeys = ITypesKeys,
   V = T extends undefined ? ITypes[U] : T,
 >(value: any, ...datatypes: U[]): value is V {
+    if (datatypes.includes('function' as U) && !datatypes.includes('asyncfunction' as U)) {
+      datatypes.push('asyncfunction' as U)
+    }
     return datatypes.includes(xType(value) as U)
 }
 
