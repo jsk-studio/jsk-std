@@ -1,6 +1,6 @@
 {
   "name": "@jsk-std/x",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "js-basic-kit",
   "sideEffects": false,
   "main": "lib/index.js",
@@ -40,6 +40,6 @@
   },
   "gitHead": "f12b8bd6d88f9f211723965110f37be5cb72617d",
   "dependencies": {
-    "@jsk-std/rc": "^0.0.2"
+    "@jsk-std/rc": "^0.0.3"
   }
 }
