@@ -1,4 +1,4 @@
-import { BrowserType, getBrowserType, getBrowserVersion, BrowserVersionUnknow, getDeviceTypes } from "../index"
+import { BrowserType, getBrowserType, getBrowserVersion, BrowserVersionUnknow, getDeviceTypes } from "../lib"
 
 
 const ua = {

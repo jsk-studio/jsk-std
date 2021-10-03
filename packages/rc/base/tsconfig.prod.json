@@ -2,7 +2,7 @@
   "compilerOptions": {
     "tsBuildInfoFile": ".tsbuildcache",
     "rootDir": "src",
-    "outDir": "lib",
+    "outDir": "lib"
   },
   "extends": "../../tsconfig",
   "exclude": ["node_modules", "lib"],

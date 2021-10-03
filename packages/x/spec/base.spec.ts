@@ -10,7 +10,7 @@ import {
     xParse, 
     xFormat, 
     xSingleton,
-} from "../index";
+} from "../lib";
 
 test('test for xEmpty', () => {
     const empties = [ null, undefined, NaN, '', {}, []]

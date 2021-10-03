@@ -1,7 +1,9 @@
 src/
+lib/**/*.map
 .gitattributes
 .gitignore
 .prettierrc
 tsconfig.json
+tsconfig.prod.json
 tslint.json
 yarn.lock

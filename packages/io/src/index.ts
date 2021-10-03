@@ -34,7 +34,19 @@ export function deleteFolderRecursive(url: string, filter?: IFilter) {
     } else {
         console.warn("Not Exists Path: " + url);
     }
-};
+}
+export function deleteFileSync(url: string, filter?: IFilter) {
+    if (!fs.existsSync(url)) {
+        return
+    }
+    if (!fs.statSync(url).isDirectory()) {
+        if (matchRule(url, filter)) {
+            fs.unlinkSync(url);
+        }
+    } else {
+        deleteFolderRecursive(url, filter)
+    }
+}
 
 export function getFilesRecursive(url: string, filter?: IFilter) {
     if (!fs.statSync(url).isDirectory()) {
@@ -65,16 +77,49 @@ export function createFolderRecursive(dirname: string) {
     }
 }
 
-export function createFolders(urls: string | string[], force = true) {
+export type ICreateOptions = {
+    force?: boolean
+}
+
+export function createFoldersSync(urls: string | string[], opts: ICreateOptions = {}) {
+    const { force } = opts
     for (const url of xArray(urls)) {
         const existed = fs.existsSync(url)
         if (existed && force) {
-            deleteFolderRecursive(url)
+            deleteFileSync(url)
             createFolderRecursive(url)
         } else if (existed) {
             console.warn('The Folder Existed: ' + url)
         } else {
             createFolderRecursive(url)
         } 
+    }
+}
+
+export function copyFileRecursive(from: string, target: string) {
+    if (fs.existsSync(target)) {
+        deleteFileSync(target)
+    } else {
+        const regexp = /[\/\\].[^\/\\]*$/
+        createFoldersSync(target.replace(regexp, ''))
+    }
+    fs.copyFileSync(from, target)
+}
+
+export function copyFilesSync(from: string, target: string, files?: string[]) {
+    if (!files) {
+        deleteFileSync(target)
+        const mfiles = getFilesRecursive(from)
+        for (const file of mfiles) {
+            copyFileRecursive(file, path.join(target, file.replace(from, '')))
+        }
+        return
+    }
+    for (const file of files) {
+        const url = path.join(from, file)
+        if (!fs.existsSync(url)) {
+            continue
+        }
+        copyFileRecursive(path.resolve(url), path.join(target, file))
     }
 }

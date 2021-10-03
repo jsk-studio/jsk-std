@@ -1,8 +1,10 @@
+# @jsk-std/rc
 src/
+lib/**/*.map
 .gitattributes
 .gitignore
 .prettierrc
 tsconfig.json
 tslint.json
 yarn.lock
-*.map
+

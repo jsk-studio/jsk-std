@@ -1,0 +1,32 @@
+{
+  "name": "@jsk-std/rc",
+  "version": "0.0.1",
+  "description": "jsk rc",
+  "main": "./src/index.js",
+  "bin": {
+    "jsk-rc": "./bin/index.js"
+  },
+  "scripts": {
+    "start": "node ./bin/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lynnkoo/js-basic-kit.git"
+  },
+  "keywords": [
+    "js-basic-kit"
+  ],
+  "author": "lynnkoo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lynnkoo/js-basic-kit/issues"
+  },
+  "homepage": "https://github.com/lynnkoo/js-basic-kit#readme",
+  "dependencies": {
+    "@jsk-std/io": "^0.0.5",
+    "yargs": "^17.2.1"
+  },
+  "peerDependencies": {
+    "@jsk-std/x": "^0.0.5"
+  }
+}

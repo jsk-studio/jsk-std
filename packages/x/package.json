@@ -6,7 +6,7 @@
   "main": "lib/index.js",
   "scripts": {
     "start": "start-storybook -p 6006",
-    "build": "tsc",
+    "build": "tsc -p tsconfig.prod.json",
     "watch": "tsc -w",
     "test": "jest",
     "build:force": "rimraf .tsbuildcache && npm run build"
@@ -40,5 +40,8 @@
       "git add"
     ]
   },
-  "gitHead": "f12b8bd6d88f9f211723965110f37be5cb72617d"
+  "gitHead": "f12b8bd6d88f9f211723965110f37be5cb72617d",
+  "dependencies": {
+    "@jsk-std/rc": "^0.0.1"
+  }
 }
