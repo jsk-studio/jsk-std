@@ -4,7 +4,7 @@
     "rootDir": "src",
     "outDir": "lib"
   },
-  "extends": "../../tsconfig.json",
-  "exclude": ["node_modules"],
+  "extends": "../../tsconfig",
+  "exclude": ["node_modules", "lib"],
   "include": ["src"]
 }

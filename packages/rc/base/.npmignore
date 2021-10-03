@@ -5,6 +5,6 @@ lib/**/*.map
 .gitignore
 .prettierrc
 tsconfig.json
+tsconfig.prod.json
 tslint.json
 yarn.lock
-

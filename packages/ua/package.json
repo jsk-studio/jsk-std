@@ -5,6 +5,7 @@
   "main": "lib/index.js",
   "sideEffects": false,
   "scripts": {
+    "sync": "jsk-rc sync",
     "build": "tsc -p tsconfig.prod.json"
   },
   "repository": {

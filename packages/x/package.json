@@ -5,10 +5,8 @@
   "sideEffects": false,
   "main": "lib/index.js",
   "scripts": {
-    "start": "start-storybook -p 6006",
+    "sync": "jsk-rc sync",
     "build": "tsc -p tsconfig.prod.json",
-    "watch": "tsc -w",
-    "test": "jest",
     "build:force": "rimraf .tsbuildcache && npm run build"
   },
   "repository": {

@@ -1,3 +1,4 @@
+# @jsk-std/rc
 src/
 lib/**/*.map
 .gitattributes

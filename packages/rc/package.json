@@ -21,6 +21,9 @@
   "bugs": {
     "url": "https://github.com/lynnkoo/js-basic-kit/issues"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "homepage": "https://github.com/lynnkoo/js-basic-kit#readme",
   "dependencies": {
     "@jsk-std/io": "^0.0.5",
