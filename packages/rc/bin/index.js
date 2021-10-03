@@ -9,6 +9,8 @@ if (commend === 'sync') {
     copyFilesSync(path.resolve(__dirname, '../base'), path.resolve(dir), [
         'tsconfig.prod.json',
         'LICENSE',
+    ])
+    copyFilesSync(path.resolve(__dirname, '../npm'), path.resolve(dir), [
         '.npmignore',
     ])
 } 
