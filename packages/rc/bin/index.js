@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const { args, rootDir, pkgConfig, flush, argv } = require('../src/index')
+const { args, rootDir, pkgConfig, pkgFlush, argv } = require('../src/index')
 const { copyFilesSync, modifyFileJSON } = require('@jsk-std/io')
 const fs = require('fs')
 const path = require('path')
@@ -38,10 +38,10 @@ if (commend === 'sync') {
         path.resolve('projects'),
     ], syncWorkSpace)
 
-    flush()
+    pkgFlush()
 }
 
-if (commend = 'remove') {
+if (commend === 'remove') {
     workscapeTraverse([
         path.resolve('packages'),
         path.resolve('projects'),
@@ -53,7 +53,7 @@ if (commend = 'remove') {
     })
 }
 
-if (commend = 'script') {
+if (commend === 'script') {
     workscapeTraverse([
         path.resolve('packages'),
         path.resolve('projects'),
