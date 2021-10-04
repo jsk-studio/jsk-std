@@ -1,6 +1,6 @@
 {
   "name": "@jsk-std/rc",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "jsk rc",
   "main": "./src/index.js",
   "bin": {

@@ -123,3 +123,15 @@ export function copyFilesSync(from: string, target: string, files?: string[]) {
         copyFileRecursive(path.resolve(url), path.join(target, file))
     }
 }
+
+export function modifyFileJSON(target: string, callback: any) {
+    if (fs.existsSync(target)) {
+        const jsonStr = fs.readFileSync(target).toString('utf-8')
+        const pkgConfig = JSON.parse(jsonStr || '{}')
+        const newPkgConfig = callback(pkgConfig)
+        const newJsonStr = JSON.stringify(newPkgConfig, null, 2) + '\n'
+        fs.writeFileSync(target, newJsonStr, { encoding: 'utf-8' })
+    } else {
+        throw new Error('JSON file not exist')
+    }
+}
