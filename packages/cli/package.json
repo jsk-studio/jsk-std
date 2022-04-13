@@ -1,0 +1,50 @@
+{
+  "name": "@jsk-std/cli",
+  "version": "0.0.1",
+  "description": "jsk cli",
+  "main": "lib/index.js",
+  "bin": {
+    "jsk-cli": "bin/index.js"
+  },
+  "scripts": {
+    "start": "tsc -p tsconfig.prod.json --watch",
+    "build": "tsc -p tsconfig.prod.json ",
+    "clean": "rm -rf dist",
+    "test": "npm run build && npm run clean && npm run test:create",
+    "test:boot": "jsk-cli boot --proj dist/test-project",
+    "test:sync": "jsk-cli sync --proj dist/test-project",
+    "test:add": "jsk-cli add packages pkg1,pkg2,pkg3 --proj dist/test-project",
+    "test:create": "jsk-cli create dist/test-project",
+    "test:dep": "jsk-cli dep jest,pkg1 pkg1,pkg3 --proj dist/test-project",
+    "test:down": "jsk-cli down",
+    "test:depd": "jsk-cli dep @test-project/pkg1,jest,pkg1,pkg2 pkg1 --del --proj=dist/test-project"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lynnkoo/js-basic-kit.git"
+  },
+  "keywords": [
+    "js-cli"
+  ],
+  "author": "lynnkoo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lynnkoo/js-basic-kit/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "homepage": "https://github.com/lynnkoo/js-basic-kit#readme",
+  "dependencies": {
+    "download-git-repo": "^3.0.2",
+    "readline-sync": "^1.4.10",
+    "yargs": "^17.4.1"
+  },
+  "peerDependencies": {
+    "@jsk-std/x": "^0.0.5",
+    "typescript": "^4.6.3"
+  },
+  "devDependencies": {
+    "@jsk-std/cli": "file:."
+  }
+}

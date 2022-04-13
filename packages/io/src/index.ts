@@ -12,9 +12,9 @@ function matchRule(url: string , filter?: IFilter) {
 
 export function deleteFolderRecursive(url: string, filter?: IFilter) {
     let files = [];
-    //判断给定的路径是否存在
+    // 判断给定的路径是否存在
     if(fs.existsSync(url) ) {
-        //返回文件和子目录的数组
+        // 返回文件和子目录的数组
         files = fs.readdirSync(url);
         let emptied = true
         for (const file of files) {

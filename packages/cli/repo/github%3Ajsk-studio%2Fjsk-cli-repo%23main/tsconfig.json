@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
-    "target": "ES6",
-    "module": "CommonJS",
-    "moduleResolution": "Node",
+    "target": "es6",
+    "jsx": "react",
+    "module": "commonjs",
+    "moduleResolution": "node",
     "declaration": true,
     "strict": true,
     "noImplicitAny": true,
@@ -13,8 +14,9 @@
     "noUnusedParameters": false,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
+    "allowSyntheticDefaultImports": true,
     "incremental": true,
-    "lib": ["ESNext", "DOM"],
+    "lib": ["es2020", "dom"],
     "importHelpers": true
   }
 }
