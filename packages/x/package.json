@@ -1,0 +1,36 @@
+{
+  "name": "@jsk-std/x",
+  "version": "0.1.0",
+  "author": "lynnkoo",
+  "description": "",
+  "main": "./lib/index.js",
+  "sideEffects": false,
+  "scripts": {
+    "start": "tsc -p tsconfig.prod.json --watch",
+    "build": "tsc -p tsconfig.prod.json"
+  },
+  "homepage": "https://github.com/jsk-stuido/jsk-std#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jsk-stuido/jsk-std.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jsk-stuido/jsk-std/issues"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "typescript": "^4.6.3",
+    "jest": "^26.0.1",
+    "ts-jest": "^26.1.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.6.3",
+    "jest": "^26.0.1",
+    "ts-jest": "^26.1.0"
+  }
+}
+
+

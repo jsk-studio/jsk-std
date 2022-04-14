@@ -1,0 +1,59 @@
+{
+  "name": "@jsk-std/cli",
+  "version": "0.0.4",
+  "author": "lynnkoo",
+  "description": "",
+  "main": "./lib/index.js",
+  "sideEffects": false,
+  "bin": {
+    "jsk-cli": "bin/index.js"
+  },
+  "scripts": {
+    "start": "tsc -p tsconfig.prod.json --watch",
+    "build": "tsc -p tsconfig.prod.json ",
+    "clean": "rm -rf dist",
+    "test": "npm run build && npm run clean && npm run test:create",
+    "test:boot": "jsk-cli boot --proj dist/test-project",
+    "test:sync": "jsk-cli sync --proj dist/test-project",
+    "test:add": "jsk-cli add packages pkg1,pkg2,pkg3 --proj dist/test-project",
+    "test:create": "jsk-cli create dist/test-project",
+    "test:dep": "jsk-cli dep jest,pkg1 pkg1,pkg3 --proj dist/test-project",
+    "test:down": "jsk-cli download --force",
+    "test:depd": "jsk-cli dep @test-project/pkg1,jest,pkg1,pkg2 pkg1 --del --proj=dist/test-project"
+  },
+  "homepage": "https://github.com/jsk-stuido/jsk-std#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jsk-stuido/jsk-std.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jsk-stuido/jsk-std/issues"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "download-git-repo": "^3.0.2",
+    "readline-sync": "^1.4.10",
+    "yargs": "^17.4.1",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.6.3",
+    "jest": "^26.0.1",
+    "ts-jest": "^26.1.0"
+  },
+  "devDependencies": {
+    "@jsk-std/cli": "file:.",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.6.3",
+    "jest": "^26.0.1",
+    "ts-jest": "^26.1.0"
+  },
+  "dependencies": {
+    "download-git-repo": "^3.0.2",
+    "readline-sync": "^1.4.10",
+    "yargs": "^17.4.1"
+  }
+}
+
+
