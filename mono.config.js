@@ -7,9 +7,12 @@ module.exports = {
     license: "MIT"
   },
   templates: [
-    "github:jsk-studio/jsk-cli-repo#main"
+    "github:jsk-studio/jsk-cli-repo#main",
+    '',
+    '',
   ],
   workspaces: {
     packages: "tsc"
   }
 }
+monos

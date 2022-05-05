@@ -565,13 +565,6 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@jsk-std/cli@file:./packages/cli":
-  version "0.0.3"
-  dependencies:
-    download-git-repo "^3.0.2"
-    readline-sync "^1.4.10"
-    yargs "^17.4.1"
-
 "@lerna/add@3.21.0":
   version "3.21.0"
   resolved "https://registry.yarnpkg.com/@lerna/add/-/add-3.21.0.tgz#27007bde71cc7b0a2969ab3c2f0ae41578b4577b"

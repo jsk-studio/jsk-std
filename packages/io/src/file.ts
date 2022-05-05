@@ -1,6 +1,14 @@
 import fs from 'fs'
 import path from 'path'
-import { folderIO } from './folder'
+import { folder_io } from './folder'
+import { x_stringify } from '@jsk-std/x'
+
+export const file_io = {
+  read: fileRead,
+  write: fileWrite,
+  copy: fileCopy,
+  modify: fileModify,
+}
 
 type FileMode = 'js' | 'json' | 'text'
 type FileOptions = {
@@ -17,6 +25,7 @@ type FileCopyOptions = {
 }
 type FileModifyOptions = FileOptions & {
   files?: any[],
+  replacer: (val: any, mpath?: string) => any,
 }
 
 function fileCopy(from: string, to: string, opts: FileCopyOptions) {
@@ -26,7 +35,7 @@ function fileCopy(from: string, to: string, opts: FileCopyOptions) {
     const topath = path.resolve(to, target[1] || target[0])
     let filetext = fileRead(frompath)
     if (filetext !== null) {
-      folderIO.create(topath.split('/').slice(0, -1).join('/'))
+      folder_io.create(topath.split('/').slice(0, -1).join('/'))
       fileWrite(topath, filetext)
     }
   }
@@ -65,69 +74,21 @@ function fileWrite(fpath: string, obj: any, opts: FileWriteOptions = {}) {
   fs.writeFileSync(fpath, filestr, { encoding: 'utf-8' })
 }
 
-function fileModify(fpath: string, opts: FileModifyOptions, replacer: any) {
+function fileModify(fpath: string, opts: FileModifyOptions) {
+  const { replacer } = opts
   fpath = path.join(fpath);
   if (opts.files && path.dirname(fpath)) {
     for (const file of opts.files) {
       const mpath = path.resolve(fpath, file)
       const filetext = fileRead(mpath, opts)
       if (filetext !== null) {
-        fileWrite(mpath, replacer(filetext) || filetext, opts)
+        fileWrite(mpath, replacer(filetext, mpath) || filetext, opts)
       }
     }
   } else {
     const filetext = fileRead(fpath, opts)
     if (filetext !== null) {
-      fileWrite(fpath, replacer(filetext) || filetext, opts)
+      fileWrite(fpath, replacer(filetext, fpath) || filetext, opts)
     }
   }
-}
-
-export const fileIO = {
-  read: fileRead,
-  write: fileWrite,
-  copy: fileCopy,
-  modify: fileModify,
-}
-
-type IStringifyOptions = {
-  space?: number,
-  replacer?: any,
-  quotes?: boolean,
-}
-
-export function x_stringify(obj: any, opts: IStringifyOptions = {}): string {
-  if (typeof obj !== "object" || opts.quotes !== false) {
-      // not an object, stringify using native function
-      let text = JSON.stringify(obj, opts.replacer, opts.space);
-      return text
-  }
-  const split = opts.space ? '\n' : ''
-  let spaceText = ''
-  if (opts.space) {
-    for (let i = 0; i < opts.space; i++) {
-      spaceText += ' '
-    }
-  }
-  // @ts-ignore
-  const spaceStep = opts.spaceStep || opts.space
-  const endSpaceText = spaceStep ? spaceText.slice(0, -spaceStep) : ''
-  const deepOpts = {
-    ...opts,
-    spaceStep,
-    space: opts.space ? opts.space + spaceStep  : opts.space,
-  }
-  if (Array.isArray(obj)) {
-    const text = obj
-      .map(o => `${spaceText}${x_stringify(o, deepOpts)}`)
-      .join(`,${split}`);
-    return `[${split}${text}${split}${endSpaceText}]`
-  }
-  // Implements recursive object serialization according to JSON spec
-  // but without quotes around the keys.
-  const text = Object
-      .keys(obj)
-      .map(key => `${spaceText}${key}: ${x_stringify(obj[key], deepOpts)}`)
-      .join(`,${split}`);
-  return `{${split}${text}${split}${endSpaceText}}`;
 }

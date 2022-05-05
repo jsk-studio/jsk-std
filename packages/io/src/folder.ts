@@ -1,6 +1,12 @@
 import fs from 'fs'
 import path from 'path'
-import rimaraf from 'rimraf'
+import rimraf from 'rimraf'
+
+export const folder_io = {
+  create: folderCreate,
+  remove: rimraf.sync,
+  list: folderList,
+}
 
 function folderCreate(fpath: string) {
   fpath = path.join(fpath);
@@ -15,7 +21,6 @@ function folderCreate(fpath: string) {
   }
 }
 
-export const folderIO = {
-  create: folderCreate,
-  remove: rimaraf.sync,
+function folderList(fpath: string) {
+
 }

@@ -1,47 +1,33 @@
 #!/usr/bin/env node
 
-const { cmd, fileIO, folderIO } = require('@jsk-std/cli')
+const { cmd, file_io, folder_io } = require('@jsk-std/io')
+const { repoResolveConfig } = require('../common/config')
 const readline = require('readline-sync')
 const path = require('path')
-if (!cmd.args[0]) {
-  console.error('create path is not found');
+
+if (!cmd.args[0] || !repoResolveConfig.mode) {
+  console.error('create path or mode is not found');
   return
 }
 
 const projectName = cmd.args[0].split('/').slice(-1)[0]
+const resolveModes = Object.keys(repoResolveConfig.mode)
 
-const jskObj = {
+const monoObj = {
   name: projectName,
-  mode: 'node',
+  mode: resolveModes[0],
   profile: {
     author: '',
     repository: '',
-    license: 'MIT',
-  },
-  templates: [
-    'github:jsk-studio/jsk-cli-repo#main',
-  ],
-}
-
-const modeMap =  {
-  'node': {
-    packages: 'tsc',
-  },
-  'koa': {
-    packages: 'tsc',
-    projects: "tsc",
-    protocols: 'tsc',
-  },
-  'grpc': {
-    packages: 'tsc',
-    projects: "tsc",
-    protocols: 'tsc',
+    license: '',
   },
 }
 
-jskObj.name = sampleQuestion('name', projectName)
-jskObj.mode = sampleQuestion('mode', jskObj.mode)
-jskObj.workspaces = modeMap[jskObj.mode] || modeMap['node']
+const modeMap = repoResolveConfig.mode
+monoObj.name = sampleQuestion('name', projectName)
+monoObj.mode = sampleQuestion('mode', monoObj.mode)
+monoObj.workspaces = modeMap[monoObj.mode] || modeMap[resolveModes[0]]
+delete monoObj.mode
 
 const simpleProfiles = [
   'author', 
@@ -50,8 +36,8 @@ const simpleProfiles = [
 ]
 
 for (const key of simpleProfiles) {
-  const val = jskObj.profile[key]
-  jskObj.profile[key] = sampleQuestion(key, val)
+  const val = monoObj.profile[key]
+  monoObj.profile[key] = sampleQuestion(key, val)
 }
 
 function sampleQuestion(key, val) {
@@ -59,10 +45,10 @@ function sampleQuestion(key, val) {
   return readline.question(ques, { defaultInput: val })
 }
 
-const configDir = path.resolve(cmd.args[0], 'configs')
-const configPath =  path.resolve(configDir, 'jsk.config.js')
+const configDir = path.resolve(cmd.args[0])
+const configPath =  path.resolve(configDir, 'mono.config.js')
 
-folderIO.create(configDir)
-fileIO.write(`${configPath}`, jskObj, { mode: 'js' })
+folder_io.create(configDir)
+file_io.write(`${configPath}`, monoObj, { mode: 'js' })
 
-cmd.exec(`jsk-cli boot --proj ${cmd.args[0]}`)
+cmd.exec(`mono-cli boot --dir ${cmd.args[0]}`)

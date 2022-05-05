@@ -1,14 +1,25 @@
 #!/usr/bin/env node
 const path = require('path')
-const { rootConfig, rootDir, fileIO } = require('@jsk-std/cli')
+const { file_io } = require('@jsk-std/io')
+const { x_call } = require('@jsk-std/x')
+const { 
+  rootConfigDir, 
+  repoResolveConfig,
+  getArgsConfigs,
+} = require('../common/config')
 
 // sync project rootConfig
-const pkgRootPath = path.resolve(rootDir, 'package.json')
-const lernaPath = path.resolve(rootDir, 'lerna.json')
-const workspaces = Object.keys(rootConfig.workspaces).map(m => m + '/*')
-fileIO.modify(pkgRootPath, { mode: 'json' }, json => {
-  json.workspaces = workspaces
-})
-fileIO.modify(lernaPath, { mode: 'json' }, json => {
-  json.packages = workspaces
-})
+const modifyPaths = [
+  'package.json',
+  'lerna.json',
+]
+for (const modifyPath of modifyPaths) {
+  const mp = path.resolve(rootConfigDir, modifyPath)
+  file_io.modify(mp, { 
+    mode: 'json', 
+    replacer:  (json, mpath) => {
+      return x_call(repoResolveConfig.boot.json, [mpath, json, getArgsConfigs()])
+    }
+  })
+}
+

@@ -1,27 +1,26 @@
 #!/usr/bin/env node
-const { cmd, rootConfig, rootDir, repoDir, repoReplacer, fileIO } = require('@jsk-std/cli')
+const { cmd, file_io } = require('@jsk-std/io')
+const { x_call } = require('@jsk-std/x')
+const { 
+  rootConfig, 
+  rootConfigDir, 
+  repoConfigDir,
+  repoResolveConfig,
+  getArgsConfigs,
+  runRootCmd,
+} = require('../common/config')
 
-const rootFiles = [
-  rootConfig.profile.license === 'MIT' && 'LICENSE',
-  ['.gitattributes.rc', '.gitattributes'],
-  ['.gitignore.rc', '.gitignore'],
-  '.prettierrc',
-  'package.json',
-  'tsconfig.json',
-  'tslint.json',
-  'lerna.json',
-  'configs/jest.config.js',
-].filter(Boolean)
+const rootFiles = x_call(repoResolveConfig.boot.files, getArgsConfigs).filter(Boolean)
 
-const modifyFiles = [
-  'package.json',
-].filter(Boolean)
+file_io.copy(repoConfigDir, rootConfigDir, { files: rootFiles })
+file_io.modify(rootConfigDir, { 
+  mode: 'text', 
+  files: rootFiles,
+  replacer: (text, mpath) => {
+    return x_call(repoResolveConfig.boot.text, [mpath, text, getArgsConfigs()])
+  }
+}), 
 
-fileIO.copy(repoDir, rootDir, { files: rootFiles })
-fileIO.modify(rootDir, { mode: 'text', files: modifyFiles }, text => {
-  return repoReplacer(text)
-})
-cmd.exec('jsk-cli sync', process.argv.slice(2))
-const runDir = cmd.argv.proj ? `cd ${cmd.argv.proj} && ` : ''
-cmd.exec(`${runDir}npm run boot`)
+cmd.exec('mono-cli sync', process.argv.slice(2))
+cmd.exec(`${runRootCmd}npm run boot`)
 

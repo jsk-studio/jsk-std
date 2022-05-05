@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 const path = require('path')
-const { cmd, fileIO, rootConfig, rootDir } = require('@jsk-std/cli')
+const { cmd, file_io } = require('@jsk-std/io')
+const { rootConfigDir, rootConfig, runRootCmd } = require('../common/config')
 
 if (!cmd.args[0] || !cmd.args[1]) {
   console.error('参数错误')
@@ -17,36 +18,35 @@ for (const from of fromDeps) {
       continue
     }
     const depPkgName = fromInfo && fromInfo.name || from
-    if (argv.del) {
+    if (cmd.argv.del) {
       const depKeys = ['dependencies', 'peerDependencies', 'devDependencies']
       for (const key of depKeys) {
         if (toInfo[key]) {
           delete toInfo[key][depPkgName]
         }
       }
-      fileIO.write(toPkgPath, toInfo, { mode: 'json' })
+      file_io.write(toPkgPath, toInfo, { mode: 'json' })
     } else if (from === to) {
-      toInfo.devDependencies[depPkgName] = 'file:.'
-      fileIO.write(toPkgPath, toInfo, { mode: 'json' })
+      // toInfo.devDependencies[depPkgName] = 'file:.'
+      // file_io.write(toPkgPath, toInfo, { mode: 'json' })
     } else  {
-      const cmd = `lerna add ${depPkgName} --scope=${toInfo.name}`
-      const dev = argv.dev ? ' --dev' : ''
-      cmd.exec(`${cmd}${dev}`)
+      const cmdstr = `${runRootCmd}lerna add ${depPkgName} --scope=${toInfo.name}`
+      const dev = cmd.argv.dev ? ' --dev' : ''
+      cmd.exec(`${cmdstr}${dev}`)
       const [curToInfo] = getPackageInfo(to)
-      const depKey = argv.dev ? 'devDependencies' : 'dependencies'
+      const depKey = cmd.argv.dev ? 'devDependencies' : 'dependencies'
       const pkgVersion = curToInfo[depKey] && curToInfo[depKey][depPkgName]
       if (pkgVersion) {
-        curToInfo.peerDependencies[depPkgName] = pkgVersion
-        fileIO.write(toPkgPath, curToInfo, { mode: 'json' })
+        file_io.write(toPkgPath, curToInfo, { mode: 'json' })
       }
     }
   }
 }
 
 function getPackageInfo(fpath) {
-  for (const work of Object.keys(rootConfig.mode)) {
-    const pkgPath = path.resolve(rootDir, work, fpath, 'package.json')
-    const info = fileIO.read(pkgPath, { mode: 'json' }) 
+  for (const work of Object.keys(rootConfig.workspaces)) {
+    const pkgPath = path.resolve(rootConfigDir, work, fpath, 'package.json')
+    const info = file_io.read(pkgPath, { mode: 'json' }) 
     if (info) {
       return [info, pkgPath]
     }

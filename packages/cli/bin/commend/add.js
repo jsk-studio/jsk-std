@@ -1,17 +1,25 @@
 #!/usr/bin/env node
 const path = require('path')
-const { cmd, rootConfig, fileIO, rootDir, repoDir, repoReplacer } = require('@jsk-std/cli')
+const { cmd, file_io } = require('@jsk-std/io')
+const { x_call } = require('@jsk-std/x')
 
-const dirAliasMap = {
-  pkg: 'packages',
-  proj: 'projects',
-  proto: 'protocols',
-}
+const { 
+  rootConfig, 
+  rootConfigDir, 
+  repoConfigDir,
+  repoResolveConfig,
+  getArgsConfigs,
+} = require('../common/config')
 
-const subPathDir = dirAliasMap[cmd.args[0]] || cmd.args[0]
+const subPathDir = cmd.args[0]
 const subRootName = cmd.args[1]
 const addMode = cmd.argv.mode || rootConfig.workspaces[subPathDir]
-const supportMode = ['tsc', 'koa', 'grpc']
+const supportMode = []
+
+for (const modeName of Object.keys(repoResolveConfig.mode)) {
+  const supports = repoResolveConfig.mode[modeName]
+  supportMode.push(...Object.values(supports))
+}
 
 if (!subRootName || !supportMode.includes(addMode)) {
   console.error('params error',cmd.args[0])
@@ -20,23 +28,19 @@ if (!subRootName || !supportMode.includes(addMode)) {
 
 const addNames = subRootName.split(',')
 for (const addName of addNames) {
-  const replaceValues = {
-    JSK_PACKAGE_NAME: `@${rootConfig.name}/${addName}`
-  }
-  const subRootDir = path.resolve(rootDir, subPathDir, addName)
-  const subRepoDir = path.resolve(repoDir, subPathDir, addMode)
-  const rootFiles = [
-    ['.npmignore.rc', '.npmignore'],
-    'package.json',
-    'tsconfig.prod.json',
-    'src/index.ts',
-    'spec/index.spec.ts',
-  ].filter(Boolean)
-  const modifyFiles = [
-    'package.json',
-  ]
-  fileIO.copy(subRepoDir, subRootDir, { files: rootFiles })
-  fileIO.modify(subRootDir, { files: modifyFiles, mode: 'text' }, text => {
-    return repoReplacer(text, replaceValues)
+  const pkgName = `@${rootConfig.name}/${addName}`
+  const subRootDir = path.resolve(rootConfigDir, subPathDir, addName)
+  const subRepoDir = path.resolve(repoConfigDir, subPathDir, addMode)
+
+  const argsConfig = getArgsConfigs({ name: pkgName })
+  const rootFiles = x_call(repoResolveConfig.package.files, argsConfig).filter(Boolean)
+
+  file_io.copy(subRepoDir, subRootDir, { files: rootFiles })
+  file_io.modify(subRootDir, { 
+    mode: 'text', 
+    files: rootFiles, 
+    replacer: (text, mpath) => {
+      return x_call(repoResolveConfig.package.text, [mpath, text, argsConfig])
+    }
   })
 }
