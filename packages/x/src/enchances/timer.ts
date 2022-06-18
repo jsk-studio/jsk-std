@@ -1,5 +1,5 @@
 // mock 耗时操作 1000 count 约为 700 毫秒，具体时间取决于电脑性能
-export function x_blocking(count = 3000) {
+export function x_block(count = 3000) {
   let a = 0
   // tslint:disable-next-line
   const startTime = +new Date()
